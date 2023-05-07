@@ -78,3 +78,10 @@ def crossover(poblacion, padres, cross_rate, mut_rate):
 
 def get_fitness(ind):
     return ind.fitness
+
+def calc_promedio(poblacion):
+    valortotal = 0
+    for ind in poblacion:
+        valortotal += ind.x_value
+    promedio = valortotal/len(poblacion)
+    return promedio
