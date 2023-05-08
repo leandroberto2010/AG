@@ -28,7 +28,7 @@ def iniciar_poblacion(poblacion, cantidad, x_min, x_max):
         poblacion.append(ind)
 
 def funcion_objetivo(x):
-    return x/(2**30-1)
+    return (x/(2**30-1))**2
 
 def evaluar(poblacion):
     total = 0
