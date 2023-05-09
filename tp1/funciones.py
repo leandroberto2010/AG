@@ -39,12 +39,20 @@ def evaluar(poblacion):
 
 def seleccion(poblacion, padres):
     fitness = []
+    seleccionados = []
     padres.clear()
     for ind in poblacion:
         fitness.append(ind.fitness) 
-    padres.extend(random.choices(poblacion, fitness, k=2)) #por que 4?
+    padres.extend(random.choices(poblacion, fitness, k=2))
+    while padres[0] == padres[1]: #evitar que tengan el mismo padre
+        padres.pop(1)
+        padres.extend(random.choices(poblacion, fitness, k=1))
+    
 
-def mutacion(hijo, mut_rate): #esta en binario el cromosoma?
+
+
+
+def mutacion(hijo, mut_rate):
     nuevo = ''
     for gen in hijo.cromosoma:
         if mut_rate >= random.random():
@@ -57,6 +65,7 @@ def mutacion(hijo, mut_rate): #esta en binario el cromosoma?
     if nuevo != hijo.cromosoma:
         hijo.crom_anterior = hijo.cromosoma
         hijo.set_cromosoma(nuevo)
+        print("Hijo mutado cromosoma = ", hijo.cromosoma, " Valor= ", hijo.x_value)
 
 def crossover(poblacion, padres, cross_rate, mut_rate):
     cross_point = random.randint(1, 9)
@@ -64,16 +73,18 @@ def crossover(poblacion, padres, cross_rate, mut_rate):
         cromosoma = padres[1].cromosoma[:cross_point] + padres[0].cromosoma[cross_point:]
         hijo_1 = Individuo()
         hijo_1.set_cromosoma(cromosoma)
+        print("Hijo 1 cromosoma = ", hijo_1.cromosoma, " Valor= ", hijo_1.x_value)
         mutacion(hijo_1, mut_rate)
         poblacion.append(hijo_1)
-        print("Hijo 1 binario = ", hijo_1.cromosoma, " Valor= ", hijo_1.x_value)
 
         cromosoma = padres[0].cromosoma[:cross_point] + padres[1].cromosoma[cross_point:]
         hijo_2 = Individuo()
         hijo_2.set_cromosoma(cromosoma)
+        print("Hijo 2 cromosoma = ", hijo_2.cromosoma, " Valor= ", hijo_2.x_value)
         mutacion(hijo_2, mut_rate)
         poblacion.append(hijo_2)
-        print ("Hijo 2 binario=  ", hijo_2.cromosoma, " Valor= ", hijo_2.x_value)
+        poblacion.remove(padres[1]) #elimino a los padres de la poblacion
+        poblacion.remove(padres[0])
 
 
 def get_fitness(ind):
@@ -85,3 +96,15 @@ def calc_promedio(poblacion):
         valortotal += ind.x_value
     promedio = valortotal/len(poblacion)
     return promedio
+
+def salvar_mejores(mejores, poblacion): #guardo los mejores valores de acuerdo al fitness y los elimino de la poblacion para evitar que sean seleccionados en el crossover
+    mejores.clear()
+    max1 = max(poblacion, key=lambda x: x.fitness)
+    mejores.append(max1)
+    poblacion.remove(max1)
+    max2= max(poblacion, key=lambda x: x.fitness)
+    mejores.append(max2)
+    poblacion.remove(max2)
+
+def insertar_mejores(mejores, poblacion): #inserto de nuevo los mejores valores
+    poblacion.extend(mejores)
