@@ -1,4 +1,5 @@
 import random
+import matplotlib.pyplot as plt
 
 class Individuo():
     x_value = 0
@@ -10,6 +11,9 @@ class Individuo():
     def set_x_value(self, x_value):
         self.x_value = x_value
         self.cromosoma = format(self.x_value, '010b')
+    
+    def set_y_value(self, y_value):
+        self.y_value = y_value
 
     def set_cromosoma(self, cromosoma):
         self.cromosoma = cromosoma
@@ -33,6 +37,7 @@ def funcion_objetivo(x):
 def evaluar(poblacion):
     total = 0
     for ind in poblacion:
+        ind.set_y_value(funcion_objetivo(ind.x_value))
         total += funcion_objetivo(ind.x_value)
     for ind in poblacion:
         ind.fitness = funcion_objetivo(ind.x_value) / total
@@ -108,3 +113,34 @@ def salvar_mejores(mejores, poblacion): #guardo los mejores valores de acuerdo a
 
 def insertar_mejores(mejores, poblacion): #inserto de nuevo los mejores valores
     poblacion.extend(mejores)
+
+def guardar_valores(poblacion, maximos, minimos, promedios):
+    valormax = max(poblacion, key=lambda x: x.fitness)
+    maximos.append(valormax.y_value)
+    valormin = min(poblacion, key=lambda x: x.fitness)
+    minimos.append(valormin.y_value)
+    promedios.append(calc_promedio(poblacion))
+
+def grafica_maximo(maximos):
+    y = maximos
+    plt.plot(y, marker = '.')
+    plt.title("Maximos")
+    plt.ylabel("Valor maximo")
+    plt.xlabel("Ciclo")
+    plt.show()
+
+def grafica_minimo(minimos):
+    y = minimos
+    plt.plot(y, marker = '.')
+    plt.title("Minimos")
+    plt.ylabel("Valor minimo")
+    plt.xlabel("Ciclo")
+    plt.show()
+
+def grafica_promedio(promedio):
+    y = promedio
+    plt.plot(y, marker = '.')
+    plt.title("Promedios")
+    plt.ylabel("Valor promedio")
+    plt.xlabel("Ciclo")
+    plt.show()

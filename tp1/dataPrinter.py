@@ -14,4 +14,3 @@ def mostrar_padres(padres):
     for padre in padres:
         print(f"[{padres.index(padre)}] x = {padre.x_value} \tf(x) = {padre.y_value} \tFitness = {padre.fitness:.2f} \tCromosoma: {padre.cromosoma}")
         
-
