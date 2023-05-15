@@ -1,6 +1,7 @@
 import random
 import matplotlib.pyplot as plt
 
+
 class Individuo():
     x_value = 0
     y_value = 0
@@ -44,7 +45,6 @@ def evaluar(poblacion):
 
 def seleccion(poblacion, padres):
     fitness = []
-    seleccionados = []
     padres.clear()
     for ind in poblacion:
         fitness.append(ind.fitness) 
@@ -53,6 +53,10 @@ def seleccion(poblacion, padres):
         padres.pop(1)
         padres.extend(random.choices(poblacion, fitness, k=1))
     
+
+
+
+
 def mutacion(hijo, mut_rate):
     nuevo = ''
     for gen in hijo.cromosoma:
@@ -68,7 +72,7 @@ def mutacion(hijo, mut_rate):
         hijo.set_cromosoma(nuevo)
         print("Hijo mutado cromosoma = ", hijo.cromosoma, " Valor= ", hijo.x_value)
 
-def crossover(poblacion, padres, cross_rate, mut_rate):
+def crossover(nueva_gen, padres, cross_rate, mut_rate):
     cross_point = random.randint(1, 9)
     if cross_rate >= random.random():
         cromosoma = padres[1].cromosoma[:cross_point] + padres[0].cromosoma[cross_point:]
@@ -76,17 +80,20 @@ def crossover(poblacion, padres, cross_rate, mut_rate):
         hijo_1.set_cromosoma(cromosoma)
         print("Hijo 1 cromosoma = ", hijo_1.cromosoma, " Valor= ", hijo_1.x_value)
         mutacion(hijo_1, mut_rate)
-        poblacion.append(hijo_1)
+        nueva_gen.append(hijo_1)
 
         cromosoma = padres[0].cromosoma[:cross_point] + padres[1].cromosoma[cross_point:]
         hijo_2 = Individuo()
         hijo_2.set_cromosoma(cromosoma)
         print("Hijo 2 cromosoma = ", hijo_2.cromosoma, " Valor= ", hijo_2.x_value)
         mutacion(hijo_2, mut_rate)
-        poblacion.append(hijo_2)
-        poblacion.remove(padres[1]) #elimino a los padres de la poblacion
-        poblacion.remove(padres[0])
-
+        nueva_gen.append(hijo_2)
+    else:
+        nueva_gen.append(padres[0])
+        nueva_gen.append(padres[1])
+    return nueva_gen
+        ##poblacion.remove(padres[1]) #elimino a los padres de la poblacion
+        ##poblacion.remove(padres[0])
 
 def get_fitness(ind):
     return ind.fitness
