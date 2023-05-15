@@ -54,26 +54,18 @@ def seleccion(poblacion, padres):
         padres.extend(random.choices(poblacion, fitness, k=1))
     
 
-
-
-
 def mutacion(hijo, mut_rate):
-    nuevo = ''
-    for gen in hijo.cromosoma:
-        if mut_rate >= random.random():
-            if gen == '1':
-                nuevo += '0'
-            else:
-                nuevo += '1'
-        else:
-            nuevo += gen
-    if nuevo != hijo.cromosoma:
-        hijo.crom_anterior = hijo.cromosoma
-        hijo.set_cromosoma(nuevo)
-        print("Hijo mutado cromosoma = ", hijo.cromosoma, " Valor= ", hijo.x_value)
+    if (mut_rate < random.random()):
+        indice1 = random.randint(0, len(hijo.cromosoma)-1)
+        indice2 = random.randint(0, len(hijo.cromosoma)-1)
+        start = max(indice1, indice2)
+        end = min(indice1, indice2)
+        for i in range(start, end):
+            hijo.cromosoma[i] = 1 - hijo.cromosoma[i]
+            
 
 def crossover(nueva_gen, padres, cross_rate, mut_rate):
-    cross_point = random.randint(1, 9)
+    cross_point = random.randint(0, len(padres[0].cromosoma))
     if cross_rate >= random.random():
         cromosoma = padres[1].cromosoma[:cross_point] + padres[0].cromosoma[cross_point:]
         hijo_1 = Individuo()
@@ -149,9 +141,9 @@ def grafica_promedio(promedio):
     plt.show()
 
 def grafica_conjunta(minimos, promedios, maximos):
-    plt.plot(maximos, marker = '.', color = "green", label = "Maximos")
-    plt.plot(promedios, marker = '.', color = "yellow", label = "Promedios")
-    plt.plot(minimos, marker = '.', color = "red", label = "Minimos")
+    plt.plot(maximos, color = "green", label = "Maximos")
+    plt.plot(promedios, color = "yellow", label = "Promedios")
+    plt.plot(minimos, color = "red", label = "Minimos")
     
     plt.legend()
     plt.ylabel("f(x)", fontsize = "20")
