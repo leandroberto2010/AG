@@ -142,7 +142,11 @@ def grafica_promedio(promedio):
     plt.show()
 
 def grafica_conjunta(minimos, promedios, maximos):
-    plt.plot(minimos, marker = '.', color = "yellow")
-    plt.plot(promedios, marker = '.', color = "orange")
-    plt.plot(maximos, marker = '.', color = "red")
+    plt.plot(maximos, marker = '.', color = "green", label = "Maximos")
+    plt.plot(promedios, marker = '.', color = "yellow", label = "Promedios")
+    plt.plot(minimos, marker = '.', color = "red", label = "Minimos")
+    
+    plt.legend()
+    plt.ylabel("f(x)", fontsize = "20")
+    plt.xlabel("Ciclo", fontsize = "20")
     plt.show()
