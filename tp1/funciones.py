@@ -53,10 +53,6 @@ def seleccion(poblacion, padres):
         padres.pop(1)
         padres.extend(random.choices(poblacion, fitness, k=1))
     
-
-
-
-
 def mutacion(hijo, mut_rate):
     nuevo = ''
     for gen in hijo.cromosoma:
@@ -98,7 +94,7 @@ def get_fitness(ind):
 def calc_promedio(poblacion):
     valortotal = 0
     for ind in poblacion:
-        valortotal += ind.x_value
+        valortotal += ind.y_value
     promedio = valortotal/len(poblacion)
     return promedio
 
@@ -143,4 +139,10 @@ def grafica_promedio(promedio):
     plt.title("Promedios")
     plt.ylabel("Valor promedio")
     plt.xlabel("Ciclo")
+    plt.show()
+
+def grafica_conjunta(minimos, promedios, maximos):
+    plt.plot(minimos, marker = '.', color = "yellow")
+    plt.plot(promedios, marker = '.', color = "orange")
+    plt.plot(maximos, marker = '.', color = "red")
     plt.show()

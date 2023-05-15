@@ -36,6 +36,4 @@ for i in range(ciclos):
     print("Promedio = ", fc.calc_promedio(poblacion))
     fc.guardar_valores(poblacion, maximos, minimos, promedios)
 
-fc.grafica_maximo(maximos)
-fc.grafica_minimo(minimos)
-fc.grafica_promedio(promedios)
+fc.grafica_conjunta(minimos, promedios, maximos)
