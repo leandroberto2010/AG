@@ -55,13 +55,22 @@ def seleccion(poblacion, padres):
     
 
 def mutacion(hijo, mut_rate):
-    if (mut_rate < random.random()):
+    if (mut_rate >= random.random()):
         indice1 = random.randint(0, len(hijo.cromosoma)-1)
         indice2 = random.randint(0, len(hijo.cromosoma)-1)
-        start = max(indice1, indice2)
-        end = min(indice1, indice2)
+        start = min(indice1, indice2)
+        end = max(indice1, indice2)
+        hijo.prev_x = hijo.cromosoma
+        hijo_mutado = list(hijo.cromosoma)
         for i in range(start, end):
-            hijo.cromosoma[i] = 1 - hijo.cromosoma[i]
+            if (hijo_mutado[i] == '0'):
+                hijo_mutado[i] = '1'
+            else:
+                hijo_mutado[i] = '0'
+        hijo.set_cromosoma(''.join(hijo_mutado))
+        print("HUBO MUTACION")
+        return hijo
+        
             
 
 def crossover(nueva_gen, padres, cross_rate, mut_rate):

@@ -13,8 +13,8 @@ nueva_gen = []
 cross_rate = 0.75
 mut_rate = 0.05
 cantidad = 10
-ciclos = 10
-elitismo = False
+ciclos = 100
+elitismo = True
 
 fc.iniciar_poblacion(poblacion, cantidad, x_min=0, x_max=(2**30)-1)
 fc.evaluar(poblacion)
