@@ -14,7 +14,8 @@ cross_rate = 0.75
 mut_rate = 0.05
 cantidad = 10
 ciclos = 100
-elitismo = True
+elitismo = False
+seleccion = 'ruleta'
 
 fc.iniciar_poblacion(poblacion, cantidad, x_min=0, x_max=(2**30)-1)
 fc.evaluar(poblacion)
@@ -28,7 +29,10 @@ for i in range(ciclos):
         fc.salvar_mejores(mejores, poblacion)
     nueva_gen.clear()
     for j in range(int(len(poblacion)/2)):
-        fc.seleccion(poblacion, padres)
+        if (seleccion == 'ruleta'):
+            fc.ruleta(poblacion, padres)
+        else:
+            fc.torneo(poblacion, padres)
         dataPrinter.mostrar_padres(padres)
         fc.crossover(nueva_gen, padres, cross_rate, mut_rate)
     poblacion.clear()
@@ -39,6 +43,7 @@ for i in range(ciclos):
     dataPrinter.mostrar_poblacion(poblacion, i+1)
     print(f"############PROMEDIO GENERACION {i+1} ############ ")
     print("Promedio = ", fc.calc_promedio(poblacion))
+    fc.mostrar_mejor(poblacion)
     fc.guardar_valores(poblacion, maximos, minimos, promedios)
 
 

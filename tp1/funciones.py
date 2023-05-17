@@ -43,32 +43,61 @@ def evaluar(poblacion):
     for ind in poblacion:
         ind.fitness = funcion_objetivo(ind.x_value) / total
 
-def seleccion(poblacion, padres):
-    fitness = []
+def mostrar_mejor(poblacion):
+    valor_maximo = max(poblacion, key=lambda x: x.y_value)
+    print('---------------------')
+    print('VALOR MAXIMO: ', valor_maximo.x_value)
+    print('VALOR MAXIMO DE FUNCION: ', valor_maximo.y_value)
+    print('CROMOSOMA VALOR MAXIMO: ', valor_maximo.cromosoma)
+    print('---------------------')
+    
+def torneo(poblacion, padres):
+    contendientes = []
     padres.clear()
-    for ind in poblacion:
-        fitness.append(ind.fitness) 
-    padres.extend(random.choices(poblacion, fitness, k=2))
-    while padres[0] == padres[1]: #evitar que tengan el mismo padre
-        padres.pop(1)
-        padres.extend(random.choices(poblacion, fitness, k=1))
+    while (len(padres)<2):
+        for i in range(1, 4):
+            posicion = random.randint(0, len(poblacion)-1) #genero 4 posiciones aleatorias
+            contendientes.append(poblacion[posicion])  
+        padres.append(max(contendientes, key=lambda x: x.fitness)) #el que tenga un mayor fitness de los contendientes sera un padre
+    return padres
+
+def ruleta(poblacion, padres):
+    padres.clear()
+    while (len(padres)<2):
+        acum = 0        #seleccion por ruleta mediante acumulacion de fitness
+        for i in poblacion:
+            peso = random.uniform(0, 1)
+            acum += i.fitness
+            if acum > peso:
+                padres.append(i)
+                break
+    return padres
+        
+
+#def seleccion(poblacion, padres): OBSOLETO
+ #   fitness = []
+  #  padres.clear()
+   # for ind in poblacion:
+    #    fitness.append(ind.fitness) 
+    #padres.extend(random.choices(poblacion, fitness, k=2)) #desarrollar, no usar este metodo
+    #while padres[0] == padres[1]: #evitar que tengan el mismo padre
+    #  padres.pop(1)
+     #   padres.extend(random.choices(poblacion, fitness, k=1))
     
 
 def mutacion(hijo, mut_rate):
     if (mut_rate >= random.random()):
-        indice1 = random.randint(0, len(hijo.cromosoma)-1)
-        indice2 = random.randint(0, len(hijo.cromosoma)-1)
-        start = min(indice1, indice2)
-        end = max(indice1, indice2)
+        posicion = random.randint(0, len(hijo.cromosoma)-1) #genero posicion aleatoria
         hijo.prev_x = hijo.cromosoma
         hijo_mutado = list(hijo.cromosoma)
-        for i in range(start, end):
-            if (hijo_mutado[i] == '0'):
-                hijo_mutado[i] = '1'
-            else:
-                hijo_mutado[i] = '0'
+        if hijo_mutado[posicion] == '0':
+            hijo_mutado[posicion] = '1'
+        else:
+            hijo_mutado[posicion] = '0'
         hijo.set_cromosoma(''.join(hijo_mutado))
-        print("HUBO MUTACION")
+        print("------------------HUBO MUTACION------------------")
+        print('VALOR MUTADO: ', hijo.x_value)
+        print('CROMOSOMA MUTADO: ', hijo.cromosoma)
         return hijo
         
             
@@ -90,11 +119,11 @@ def crossover(nueva_gen, padres, cross_rate, mut_rate):
         mutacion(hijo_2, mut_rate)
         nueva_gen.append(hijo_2)
     else:
+        mutacion(padres[0], mut_rate)
+        mutacion(padres[1], mut_rate)
         nueva_gen.append(padres[0])
         nueva_gen.append(padres[1])
     return nueva_gen
-        ##poblacion.remove(padres[1]) #elimino a los padres de la poblacion
-        ##poblacion.remove(padres[0])
 
 def get_fitness(ind):
     return ind.fitness
