@@ -6,11 +6,13 @@ class Objeto:
 def mejor_combinacion(objetos, volumen_maximo):
     def generar_combinaciones(actual_combinacion, i, volumen_actual, valor_actual):
         nonlocal mejor_valor, mejor_combinacion
+        global volumen
         
         #guardo la mejor combinacion que tenga el valor maximo
         if volumen_actual <= volumen_maximo and valor_actual > mejor_valor:
             mejor_valor = valor_actual
             mejor_combinacion = actual_combinacion[:]
+            volumen = volumen_actual
         
         if i == len(objetos) or volumen_actual > volumen_maximo:
             return
@@ -28,7 +30,7 @@ def mejor_combinacion(objetos, volumen_maximo):
     mejor_combinacion = []
     generar_combinaciones([], 0, 0, 0)
     
-    return mejor_combinacion, mejor_valor
+    return mejor_combinacion, mejor_valor, volumen
 
 objetos = [
     Objeto(150, 20),
@@ -44,10 +46,11 @@ objetos = [
 ]
 
 maxvol = 4200
-mejor_combinacion, mejor_valor = mejor_combinacion(objetos, maxvol)
+mejor_combinacion, mejor_valor, volumen = mejor_combinacion(objetos, maxvol)
 
 print("Mejor combinación:")
 for objeto in mejor_combinacion:
     print(f"Volumen: {objeto.volumen}, Valor: {objeto.valor}")
 
 print(f"Mejor valor total: {mejor_valor}")
+print(f"Volumen: {volumen}")
