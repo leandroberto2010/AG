@@ -2,6 +2,7 @@ class Objeto:
     def __init__(self, volumen, valor):
         self.volumen = volumen
         self.valor = valor
+        self.proporcion = valor/volumen
 
 
 def greedy(objetos, volumen_maximo):
@@ -31,7 +32,7 @@ objetos = [
     Objeto(353, 28),
 ]
 
-objetos.sort(key=lambda x: x.valor, reverse=True)
+objetos.sort(key=lambda x: x.proporcion, reverse=True)
 maxvol = 4200
 misobj, valor, vol = greedy(objetos, maxvol)
 
