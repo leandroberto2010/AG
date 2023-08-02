@@ -53,4 +53,4 @@ for objeto in mejor_combinacion:
     print(f"Volumen: {objeto.volumen}, Valor: {objeto.valor}")
 
 print(f"Mejor valor total: {mejor_valor}")
-print(f"Volumen: {volumen}")
+print(f"Volumen utilizado: {volumen}")
