@@ -1,48 +1,16 @@
-class Objeto:
-    def __init__(self, volumen, valor):
-        self.volumen = volumen
-        self.valor = valor
-        self.proporcion = valor/volumen
+def greedy(items, capacidad):
+    n = len(items)
+    # Creamos una lista de índices y la ordenamos por la relación valor/peso de forma descendente
+    indexes = sorted(range(n), key=lambda i: items[i]['valor'] / items[i]['volumen'], reverse=True)
 
+    valor_total = 0
+    peso_total = 0
+    items_seleccionados = []
 
-def greedy(objetos, volumen_maximo):
-    volumen_actual = 0
-    valor_actual = 0
-    misobj=[]
-    for i in range(len(objetos)-1):
-        if ((volumen_actual+objetos[i].volumen) <= volumen_maximo):
-                misobj.append(objetos[i])
-                volumen_actual = volumen_actual + objetos[i].volumen
-                valor_actual = valor_actual + objetos[i].valor
-    return misobj, valor_actual, volumen_actual
+    for i in indexes:
+        if peso_total + items[i]['volumen'] <= capacidad:
+            valor_total += items[i]['valor']
+            peso_total += items[i]['volumen']
+            items_seleccionados.append(items[i])
 
-
-
-
-objetos = [
-    Objeto(150, 20),
-    Objeto(325, 40),
-    Objeto(600, 50),
-    Objeto(805, 36),
-    Objeto(430, 25),
-    Objeto(1200, 64),
-    Objeto(770, 54),
-    Objeto(60, 18),
-    Objeto(930, 46),
-    Objeto(353, 28),
-]
-
-objetos.sort(key=lambda x: x.proporcion, reverse=True)
-maxvol = 4200
-misobj, valor, vol = greedy(objetos, maxvol)
-
-print("Objetos: ")
-for i in objetos:
-    print(f"Volumen: {i.volumen}, Valor: {i.valor}")
-
-print("Combinacion: ")
-for objeto in misobj:
-     print(f"Volumen: {objeto.volumen}, Valor: {objeto.valor}")
-
-print(f"Valor: {valor}")
-print(f"Volumen total: {vol}")
+    return valor_total, items_seleccionados
