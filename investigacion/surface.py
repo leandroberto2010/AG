@@ -45,15 +45,20 @@ class Surface:
             self.surface[x][y] = TURBINE
             return True
         
-    def toggle_cell(self):
-        x, y = (random.randint(0, self.height-1), random.randint(0, self.width-1))
-        while self.surface[x][y] == FORBIDDEN: 
+    def toggle_cell(self, isFull):
+        if isFull:
             x, y = (random.randint(0, self.height-1), random.randint(0, self.width-1))
+            while self.surface[x][y] == FORBIDDEN or self.surface[x][y]==FREE: 
+                x, y = (random.randint(0, self.height-1), random.randint(0, self.width-1))
+        else:
+            x, y = (random.randint(0, self.height-1), random.randint(0, self.width-1))
+            while self.surface[x][y] == FORBIDDEN:
+                x, y = (random.randint(0, self.height-1), random.randint(0, self.width-1))
         
         if self.surface[x][y] == TURBINE:
             self.surface[x][y] = FREE
         else:
-            self.surface[x][y] = FREE
+            self.surface[x][y] = TURBINE
 
     def turbine_count(self):
         count = 0
