@@ -64,7 +64,7 @@ def crossover():
         child1.set_surface(obtener_cromosoma(padres))
         child2.set_surface(obtener_cromosoma(padres[::-1]))
 
-        if (child1.turbine_count()>25 | child2.turbine_count()>25):
+        if (child1.turbine_count()>25 or child2.turbine_count()>25):
             crossover()
 
         mutacion(child1)
@@ -78,22 +78,23 @@ def crossover():
         next_generation.extend(padres)
 
 def mutacion(ind):
+    isFull = False
+    if ind.turbine_count() >= 25: isFull = True
     if MUT_RATE > random.random():
-        ind.toggle_cell()
-    if ind.turbine_count() > 25:
-        while ind.turbine_count()>25:
-            ind.toggle_cell()
+        ind.toggle_cell(isFull)
+
 
 init(population_size=30, height=10, width=10)
 evaluar()
 for _ in range(CYCLES):
     while (len(next_generation) < len(population)):
         padres.clear()
-        seleccion('torneo')
+        seleccion('ruleta')
         crossover()
-    population = next_generation
+    population = next_generation.copy()
     evaluar()
     stats.save_data(population, maximos, minimos, promedios)
+    next_generation.clear()
 
 for ind in population:
     ind.print_surface()
