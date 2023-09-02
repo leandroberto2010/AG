@@ -58,20 +58,25 @@ def seleccion(metodo):
 def crossover(padres, hijos):
     hijos.clear()
     cross_point = random.randint(0, padres[0].height-1)
-    child1=Surface()
-    child2=Surface()
-
-    child1.set_surface(padres[0].surface[:cross_point] + padres[1].surface[cross_point:])
-    child2.set_surface(padres[1].surface[:cross_point] + padres[0].surface[cross_point:])
 
     if cross_rate >= random.random():
+        child1=Surface()
+        child2=Surface()
+
+        child1.set_surface(padres[0].surface[:cross_point] + padres[1].surface[cross_point:])
+        child2.set_surface(padres[1].surface[:cross_point] + padres[0].surface[cross_point:])
+
         while child1.turbine_count() > 25:
             child1.toggle_cell()
+            
         while child2.turbine_count() > 25:
             child2.toggle_cell()
         hijos.append(child1)
         hijos.append(child2)
     else:
+        for p in padres:
+            while p.turbine_count() > 25:
+                p.toggle_cell()
         hijos=[copy.deepcopy(p) for p in padres]
     return hijos
 
@@ -83,7 +88,7 @@ def mutacion(ind):
 
 def elite(population):
     elite_population.clear()
-    for i in range(2):
+    for _ in range(2):
         elite_population.append(population.pop(0))
 
 init(population_size=50, height=10, width=10, turbines=25)
@@ -116,5 +121,13 @@ for ind in population:
     print('Potencia media:', ind.get_average_power())
     print('Fitness:', ind.fitness)
     print('---------')
+
+print('Configuracion optima: ')
+population[0].print_surface()
+print('Turbinas:', population[0].turbine_count())
+print('Potencia total: ', population[0].get_total_power())
+print('Potencia media:', population[0].get_average_power())
+print('Fitness:', population[0].fitness)
+print('---------')
 
 stats.grafica(maximos, minimos, promedios)

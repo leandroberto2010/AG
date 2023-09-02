@@ -66,6 +66,7 @@ class Surface:
             x = random.randint(0, self.height-1)
             y = random.randint(0, self.width-1)
         self.surface[x][y]=turbine
+        cont=self.turbine_count()
 
             
 
