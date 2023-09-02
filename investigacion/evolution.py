@@ -47,8 +47,6 @@ def ruleta():
             acum += ind.fitness
             if acum >= peso:
                 padres.append(ind)
-                if ind.turbine_count()>25:
-                    print('seleccion mala')
                 break
     return padres
 
