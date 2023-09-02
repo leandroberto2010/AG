@@ -47,7 +47,10 @@ def ruleta():
             acum += ind.fitness
             if acum >= peso:
                 padres.append(ind)
+                if ind.turbine_count()>25:
+                    print('seleccion mala')
                 break
+    return padres
 
 def seleccion(metodo):
     if (metodo == "ruleta"):
@@ -71,12 +74,10 @@ def crossover(padres, hijos):
             
         while child2.turbine_count() > 25:
             child2.toggle_cell()
+        
         hijos.append(child1)
         hijos.append(child2)
     else:
-        for p in padres:
-            while p.turbine_count() > 25:
-                p.toggle_cell()
         hijos=[copy.deepcopy(p) for p in padres]
     return hijos
 
@@ -100,12 +101,11 @@ for _ in range(cycles):
     while len(next_generation)<len(population):
         padres.clear()
         seleccion('torneo')
-        hijos = crossover(padres, hijos)
+        hijos=[copy.deepcopy(c) for c in crossover(padres, hijos)]
         for h in hijos:
-            next_generation.append(h)
+            next_generation.append(mutacion(h))
     population.clear()
-    for ind in next_generation:
-        population.append(mutacion(ind))
+    population=[copy.deepcopy(ind) for ind in next_generation]
     next_generation.clear()
     if elitismo:
         for e in elite_population:
